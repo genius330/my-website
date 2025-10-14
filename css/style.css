@@ -1138,3 +1138,237 @@ nav ul li a:hover {
     line-height: 1.6;
 }
 
+/* 📱 Адаптивность для всех страниц — мобильные устройства */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    /* Шапка */
+    header .container {
+        flex-direction: column;
+        padding: 12px 15px;
+        gap: 12px;
+    }
+
+    /* Бургер-меню */
+    .burger-menu {
+        display: block;
+        cursor: pointer;
+        z-index: 101;
+    }
+
+    .burger-menu span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background-color: #333;
+        margin: 4px;
+        transition: 0.3s;
+    }
+
+    .burger-menu.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .burger-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .burger-menu.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+    /* Мобильное меню */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(10px);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-100%);
+        transition: transform 0.5s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .mobile-menu.active {
+        transform: translateY(0);
+    }
+
+    .mobile-menu ul {
+        list-style: none;
+        text-align: center;
+        padding: 0;
+    }
+
+    .mobile-menu ul li {
+        margin: 15px 0;
+    }
+
+    .mobile-menu ul li a {
+        font-size: 1.5rem;
+        color: #0056b3;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .mobile-menu ul li a:hover {
+        background: #e9f0fa;
+        color: #0056b3;
+    }
+
+    /* Скрыть десктопное меню на мобильных */
+    .desktop-menu {
+        display: none;
+    }
+}
+
+/* Показывать десктопное меню только на больших экранах */
+@media (min-width: 769px) {
+    .desktop-menu {
+        display: block;
+    }
+
+    .mobile-menu {
+        display: none !important;
+    }
+
+    .burger-menu {
+        display: none;
+    }
+}
+
+/* 🌌 ПРЕМИАЛЬНЫЙ ЛОАДЕР */
+.premium-preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #001f3f, #0056b3);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: opacity 1.5s ease-out;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: fadeInUp 1s ease-out;
+}
+
+.logo-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffcc00, #ff9900);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(255,204,0,0.5);
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.logo-text {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #001f3f;
+    letter-spacing: 2px;
+}
+
+.slogan {
+    font-size: 1.8rem;
+    color: white;
+    margin-top: 15px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.5s forwards;
+}
+
+.loading-text {
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.8);
+    margin: 20px 0;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 1s forwards;
+}
+
+.progress-bar {
+    width: 80%;
+    max-width: 400px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffcc00, #ff9900);
+    width: 0%;
+    animation: fillProgress 3s ease-out forwards;
+    box-shadow: 0 0 10px rgba(255,204,0,0.5);
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255,204,0,0.5);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(255,204,0,0.7);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255,204,0,0.5);
+    }
+}
+
+@keyframes fillProgress {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+/* При скрытии — плавное исчезновение */
+.premium-preloader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}

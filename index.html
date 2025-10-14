@@ -7,11 +7,43 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<!-- 🌌 ПРЕМИАЛЬНЫЙ ЛОАДЕР -->
+<div class="premium-preloader" id="premiumPreloader">
+    <div class="logo-container">
+        <div class="logo-circle">
+            <span class="logo-text">T</span>
+        </div>
+        <h2 class="slogan">TravelLux</h2>
+    </div>
+    <div class="loading-text">Загружаем ваше путешествие...</div>
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+</div>
     <!-- Шапка с меню -->
     <header>
         <div class="container">
-            <div class="logo">Путешествия мечты</div>
-            <nav>
+            <div class="logo">TravelLux</div>
+    
+            <!-- Бургер-иконка -->
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+    
+            <!-- Мобильное меню -->
+            <nav class="mobile-menu" id="mobileMenu">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="tours.html">Туры</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </nav>
+    
+            <!-- Десктопное меню (скрыто на мобильных) -->
+            <nav class="desktop-menu">
                 <ul>
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="about.html">О нас</a></li>
@@ -113,4 +145,42 @@
             </div>
         </div>
     </div>
-</footer>
+    </footer>
+<script>
+    const burger = document.getElementById('burgerMenu');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    burger.addEventListener('click', () => {
+        burger.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+    });
+
+    // Закрыть меню при клике на ссылку
+    mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            burger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preloader = document.getElementById('premiumPreloader');
+
+        // Убедимся, что страница полностью загрузилась
+        window.addEventListener('load', function() {
+            // Показываем прогресс-бар до 100%
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = '100%';
+
+            // Через 1 секунду после заполнения — начинаем исчезать
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 1000); // Ждём завершения анимации
+            }, 1000);
+        });
+    });
+</script>
