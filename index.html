@@ -146,6 +146,87 @@
         </div>
     </div>
     </footer>
+
+    <!-- Модальное окно с турами -->
+<div class="modal" id="toursModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content tours-modal">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <h2>Наши премиальные туры</h2>
+        <p class="modal-subtitle">Исследуйте мир без компромиссов</p>
+
+        <div class="tours-grid" id="toursGrid">
+            <!-- Туры будут добавлены через JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно: Детали тура -->
+<div class="modal" id="tourDetailModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content tour-detail-modal">
+        <button class="modal-close">&times;</button>
+        <div class="tour-header">
+            <div class="tour-icon-large" id="modalIcon">🏔️</div>
+            <h2 id="modalTitle">Альпийские вершины</h2>
+            <p class="tour-price-large" id="modalPrice">от 2 490 €</p>
+        </div>
+        <p id="modalDescription">7-дневный треккинг по Швейцарским Альпам с гидом и шале.</p>
+        
+        <div class="booking-actions">
+            <button class="btn-primary" id="bookBtn">Забронировать тур</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно: Форма бронирования -->
+<div class="modal" id="bookingFormModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content booking-form-modal">
+        <button class="modal-close">&times;</button>
+        <h2>Забронировать тур</h2>
+        <p id="bookingTourTitle" class="booking-subtitle">Альпийские вершины</p>
+
+        <form id="bookingForm">
+            <div class="form-group">
+                <label>Ваше имя *</label>
+                <input type="text" required placeholder="Иван Иванов">
+            </div>
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" required placeholder="ivan@example.com">
+            </div>
+            <div class="form-group">
+                <label>Телефон *</label>
+                <input type="tel" required placeholder="+7 (999) 123-45-67">
+            </div>
+            <div class="form-group">
+                <label>Дата начала тура</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>Количество человек</label>
+                <select>
+                    <option>1</option>
+                    <option selected>2</option>
+                    <option>3</option>
+                    <option>4+</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Подтвердить бронирование</button>
+        </form>
+    </div>
+</div>
+
+<!-- Уведомление об успехе -->
+<div class="notification" id="successNotification">
+    <div class="notification-icon">✅</div>
+    <div class="notification-content">
+        <h3>Спасибо за доверие!</h3>
+        <p>Ваш запрос принят. Наш менеджер свяжется с вами в течение 15 минут для подтверждения бронирования.</p>
+    </div>
+</div>
+
 <script>
     const burger = document.getElementById('burgerMenu');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -182,5 +263,110 @@
                 }, 1000); // Ждём завершения анимации
             }, 1000);
         });
+    });
+</script>
+
+<script>
+    // Данные туров (остаются те же)
+    const tours = [
+        { title: "Альпийские вершины", icon: "🏔️", description: "7-дневный треккинг по Швейцарским Альпам с гидом и шале.", price: "от 2 490 €" },
+        { title: "Скандинавская сага", icon: "🌌", description: "Путешествие в Норвегию: фьорды, северное сияние, хюгге-отели.", price: "от 3 100 €" },
+        { title: "Япония: путь самурая", icon: "🏯", description: "Токио, Киото, храмы, чайные церемонии и горячие источники.", price: "от 2 850 €" },
+        { title: "Сафари в Танзании", icon: "🦁", description: "Национальные парки, львы, слоны, закат над Серенгети.", price: "от 4 200 €" },
+        { title: "Мальдивы мечты", icon: "🏝️", description: "Вилла над водой, дайвинг, частный ужин на пляже.", price: "от 3 900 €" },
+        { title: "Перу: тропа инков", icon: "⛰️", description: "Мачу-Пикчу, Анды, древние руины и местная кухня.", price: "от 2 100 €" },
+        { title: "Исландия круглый год", icon: "❄️", description: "Голубая лагуна, гейзеры, ледники и вулканы.", price: "от 2 600 €" },
+        { title: "Итальянская dolce vita", icon: "🍝", description: "Рим, Флоренция, Венеция, винные туры и гастрономия.", price: "от 2 300 €" },
+        { title: "Новая Зеландия: Средиземье", icon: "🌿", description: "Хоббитон, фьорды, вулканы и приключения как в фильмах.", price: "от 4 500 €" },
+        { title: "Марокко: пустыня и дворцы", icon: "🐪", description: "Марракеш, Сахара, касбы, специи и ночные базары.", price: "от 1 950 €" },
+        { title: "Галапагосские острова", icon: "🐢", description: "Экзотическая фауна, дайвинг, экотуризм класса люкс.", price: "от 5 200 €" },
+        { title: "Антарктида: край света", icon: "❄️", description: "Эксклюзивный круиз к ледникам, пингвинам и ледяным пещерам.", price: "от 12 000 €" }
+    ];
+
+    let currentTour = null;
+
+    // Функция: открыть модальное окно тура
+    function openTourModal(tour) {
+        currentTour = tour;
+        document.getElementById('modalIcon').textContent = tour.icon;
+        document.getElementById('modalTitle').textContent = tour.title;
+        document.getElementById('modalPrice').textContent = tour.price;
+        document.getElementById('modalDescription').textContent = tour.description;
+        closeModal('toursModal');
+        openModal('tourDetailModal');
+    }
+
+    // Функция: открыть форму бронирования
+    function openBookingForm() {
+        document.getElementById('bookingTourTitle').textContent = currentTour.title;
+        closeModal('tourDetailModal');
+        openModal('bookingFormModal');
+    }
+
+    // Функция: показать уведомление
+    function showSuccessNotification() {
+        const notif = document.getElementById('successNotification');
+        notif.style.display = 'block';
+        setTimeout(() => {
+            notif.style.display = 'none';
+        }, 5000); // исчезнет через 5 секунд
+    }
+
+    // Универсальные функции модальных окон
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Закрытие по клику на оверлей или крестик
+    document.querySelectorAll('.modal').forEach(modal => {
+        const closeBtn = modal.querySelector('.modal-close');
+        const overlay = modal.querySelector('.modal-overlay');
+        if (closeBtn) closeBtn.onclick = () => closeModal(modal.id);
+        if (overlay) overlay.onclick = () => closeModal(modal.id);
+    });
+
+    // Закрытие по Esc
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (modal.style.display === 'block') closeModal(modal.id);
+            });
+        }
+    });
+
+    // Генерация карточек туров
+    function renderTours() {
+        const grid = document.getElementById('toursGrid');
+        grid.innerHTML = tours.map((tour, index) => `
+            <div class="tour-card" onclick="openTourModal(${JSON.stringify(tour).replace(/"/g, '&quot;')})">
+                <div class="tour-icon">${tour.icon}</div>
+                <h3>${tour.title}</h3>
+                <p>${tour.description}</p>
+                <div class="tour-price">${tour.price}</div>
+            </div>
+        `).join('');
+    }
+
+    // Обработчик кнопки "Посмотреть туры"
+    document.querySelector('a[href="#tours"]').addEventListener('click', function(e) {
+        e.preventDefault();
+        renderTours();
+        openModal('toursModal');
+    });
+
+    // Обработчик кнопки "Забронировать"
+    document.getElementById('bookBtn').addEventListener('click', openBookingForm);
+
+    // Обработчик формы бронирования
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        closeModal('bookingFormModal');
+        showSuccessNotification();
     });
 </script>
